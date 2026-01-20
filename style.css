@@ -1,0 +1,48 @@
+/* Tambahan untuk mencegah tumpang tindih */
+.option-item {
+    min-height: 60px; /* Memberikan tinggi minimum */
+    align-items: flex-start; /* Agar konten sejajar di atas */
+    overflow-wrap: break-word; /* Memastikan teks tidak keluar dari kontainer */
+    word-wrap: break-word;
+}
+
+.options-grid {
+    max-width: 100%;
+    overflow: hidden;
+}
+
+/* Mencegah teks keluar dari kontainer */
+.question-text, .option-text {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+}
+
+/* Mencegah kontainer meluas terlalu lebar */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    overflow-x: hidden; /* Mencegah scroll horizontal */
+}
+
+.test-content {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* Pastikan gambar atau elemen lain tidak menyebabkan overflow */
+img, video, iframe {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Tambahan untuk hasil tes di handphone */
+#result-page {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+.result-message {
+    max-width: 100%;
+    word-wrap: break-word;
+}

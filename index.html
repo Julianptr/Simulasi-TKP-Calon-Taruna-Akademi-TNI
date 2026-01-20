@@ -1,0 +1,2006 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>Simulasi TKP Calon Taruna Akademi TNI</title>
+    <link rel="stylesheet" href="./style.css">
+
+  </head>
+    
+  <body>
+  <html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+    <title>Tes TKP - CATAR Akademi TNI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            width: 100%;
+            overflow-x: hidden;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #1a365d;
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .header h2 {
+            font-size: 1.5rem;
+            font-weight: normal;
+            margin-bottom: 5px;
+        }
+        
+        .header .passing-grade {
+            display: inline-block;
+            background-color: #e53e3e;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        
+        /* Menu Utama */
+        #main-menu {
+            background-color: white;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .menu-info {
+            background-color: #edf2f7;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        
+        .menu-info h3 {
+            color: #1a365d;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+        
+        .info-item {
+            display: flex;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #cbd5e0;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            width: 180px;
+            color: #2d3748;
+        }
+        
+        .info-value {
+            color: #4a5568;
+        }
+        
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+        
+        .category-card {
+            background-color: #e6fffa;
+            border-left: 5px solid #38b2ac;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        
+        .category-card h4 {
+            color: #234e52;
+            margin-bottom: 5px;
+        }
+        
+        .category-card p {
+            color: #4a5568;
+            font-size: 0.9rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: #1a365d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+        }
+        
+        .btn:hover {
+            background-color: #2c5282;
+        }
+        
+        .btn-start {
+            background-color: #2b6cb0;
+            font-size: 1.2rem;
+            padding: 15px 40px;
+            display: block;
+            margin: 30px auto 0;
+        }
+        
+        .btn-start:hover {
+            background-color: #3182ce;
+        }
+        
+        /* Halaman Tes */
+        #test-page, #result-page {
+            display: none;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .test-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        /* Sembunyikan teks "TKP CATAR Akademi TNI" di header halaman tes */
+        .test-header h2 {
+            display: none;
+        }
+        
+        .timer {
+            background-color: #fed7d7;
+            color: #c53030;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 1.3rem;
+        }
+        
+        .timer.warning {
+            background-color: #feebc8;
+            color: #dd6b20;
+        }
+        
+        .timer.danger {
+            background-color: #fed7d7;
+            color: #c53030;
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+        
+        .test-content {
+            display: flex;
+            gap: 20px;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        
+        /* Navigasi Soal */
+        .question-nav {
+            width: 25%;
+            background-color: #f7fafc;
+            border-radius: 8px;
+            padding: 15px;
+            height: 520px;
+            border: 1px solid #e2e8f0;
+            position: relative;
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
+        
+        /* Sembunyikan teks "Navigasi Soal" */
+        .question-nav h3 {
+            display: none;
+        }
+        
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            max-height: none;
+        }
+        
+        .nav-item {
+            background-color: #e2e8f0;
+            border: 2px solid #cbd5e0;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        
+        .nav-item:hover {
+            background-color: #cbd5e0;
+        }
+        
+        .nav-item.active {
+            background-color: #4299e1;
+            color: white;
+            border-color: #3182ce;
+        }
+        
+        .nav-item.answered {
+            background-color: #9ae6b4;
+            border-color: #68d391;
+        }
+        
+        /* Area Soal */
+        .question-area {
+            width: 75%;
+        }
+        
+        .question-category {
+            color: #4a5568;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .question-number {
+            font-size: 1.2rem;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+        
+        .question-text {
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            padding: 15px;
+            background-color: #f7fafc;
+            border-radius: 8px;
+            line-height: 1.5;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            hyphens: auto;
+        }
+        
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            max-width: 100%;
+            overflow: hidden;
+        }
+        
+        .option-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-height: 60px;
+            align-items: flex-start;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+        
+        .option-item:hover {
+            background-color: #edf2f7;
+            border-color: #cbd5e0;
+        }
+        
+        .option-item.selected {
+            background-color: #bee3f8;
+            border-color: #4299e1;
+        }
+        
+        .option-letter {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            background-color: #4299e1;
+            color: white;
+            border-radius: 50%;
+            margin-right: 15px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .option-text {
+            flex-grow: 1;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+        
+        .test-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .btn-disabled {
+            background-color: #a0aec0;
+            cursor: not-allowed;
+        }
+        
+        .btn-disabled:hover {
+            background-color: #a0aec0;
+        }
+        
+        /* Halaman Hasil */
+        #result-page {
+            text-align: center;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        
+        .result-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 30px;
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+        
+        .result-title {
+            color: #2d3748;
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+        
+        .score-display {
+            font-size: 5rem;
+            font-weight: bold;
+            margin: 30px 0;
+            color: #1a365d;
+        }
+        
+        .result-status {
+            display: inline-block;
+            padding: 10px 30px;
+            border-radius: 30px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+        
+        .status-ms {
+            background-color: #c6f6d5;
+            color: #22543d;
+        }
+        
+        .status-tms {
+            background-color: #fed7d7;
+            color: #742a2a;
+        }
+        
+        .result-details {
+            background-color: #f7fafc;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px 0;
+            text-align: left;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .result-details h3 {
+            margin-bottom: 15px;
+            color: #2d3748;
+        }
+        
+        .category-score {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px dashed #cbd5e0;
+        }
+        
+        .category-name {
+            font-weight: bold;
+        }
+        
+        .category-points {
+            color: #4a5568;
+        }
+        
+        /* Sembunyikan teks result message */
+        .result-message {
+            display: none;
+        }
+        
+        .result-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        /* Tombol utama di halaman hasil */
+        #back-to-menu {
+            background-color: #2b6cb0;
+            font-size: 1.1rem;
+            padding: 14px 35px;
+        }
+        
+        #back-to-menu:hover {
+            background-color: #3182ce;
+        }
+        
+        /* Sembunyikan tombol "Ulangi Tes" */
+        #retry-test {
+            display: none;
+        }
+        
+        .footer-note {
+            margin-top: 40px;
+            color: #718096;
+            font-size: 0.9rem;
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        /* Media Query untuk Responsif */
+        
+        /* Tablet dan Laptop Kecil */
+        @media (max-width: 1024px) {
+            .test-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .question-nav, .question-area {
+                width: 100%;
+            }
+            
+            .question-nav {
+                max-height: 200px;
+                overflow-y: auto;
+            }
+            
+            .nav-grid {
+                grid-template-columns: repeat(10, 1fr);
+                gap: 8px;
+            }
+            
+            .test-header {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+        
+        /* Tablet */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .header h2 {
+                font-size: 1.2rem;
+            }
+            
+            .test-header {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                gap: 10px;
+            }
+            
+            .timer {
+                align-self: flex-start;
+            }
+            
+            .nav-grid {
+                grid-template-columns: repeat(8, 1fr);
+            }
+            
+            .option-item {
+                padding: 12px;
+                flex-wrap: wrap;
+            }
+            
+            .option-letter {
+                margin-right: 10px;
+                width: 25px;
+                height: 25px;
+                font-size: 0.9rem;
+            }
+            
+            .option-text {
+                font-size: 0.95rem;
+            }
+            
+            .question-nav {
+                padding: 15px 12px;
+            }
+        }
+        
+        /* Handphone */
+        @media (max-width: 480px) {
+            .container {
+                padding: 8px;
+            }
+            
+            .header {
+                padding: 15px 10px;
+                margin-bottom: 15px;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+                line-height: 1.3;
+            }
+            
+            .header h2 {
+                font-size: 1rem;
+            }
+            
+            .passing-grade {
+                font-size: 0.8rem;
+                padding: 4px 10px;
+            }
+            
+            #main-menu {
+                padding: 20px 15px;
+            }
+            
+            .menu-info {
+                padding: 15px;
+            }
+            
+            .info-item {
+                flex-direction: column;
+                margin-bottom: 8px;
+            }
+            
+            .info-label {
+                width: 100%;
+                margin-bottom: 2px;
+            }
+            
+            .categories-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .category-card {
+                padding: 12px;
+            }
+            
+            .nav-grid {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 6px;
+                margin-top: 0;
+            }
+            
+            .nav-item {
+                height: 35px;
+                font-size: 0.9rem;
+            }
+            
+            .question-nav {
+                padding: 12px 10px;
+            }
+            
+            .question-text {
+                font-size: 1.1rem;
+                padding: 12px;
+                margin-bottom: 20px;
+            }
+            
+            .options-grid {
+                gap: 8px;
+            }
+            
+            .option-item {
+                padding: 10px;
+                min-height: auto;
+            }
+            
+            .option-letter {
+                width: 22px;
+                height: 22px;
+                font-size: 0.8rem;
+                margin-right: 8px;
+            }
+            
+            .option-text {
+                font-size: 0.9rem;
+                line-height: 1.4;
+            }
+            
+            .test-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+                margin-bottom: 10px;
+                padding-bottom: 8px;
+            }
+            
+            .test-header div:first-child {
+                flex-grow: 1;
+            }
+            
+            .timer {
+                font-size: 1.1rem;
+                padding: 6px 10px;
+            }
+            
+            .test-footer {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .test-footer .btn {
+                width: 100%;
+                margin-bottom: 5px;
+            }
+            
+            .result-container {
+                padding: 20px 15px;
+            }
+            
+            .result-title {
+                font-size: 1.5rem;
+            }
+            
+            .score-display {
+                font-size: 3.5rem;
+                margin: 20px 0;
+            }
+            
+            .result-status {
+                font-size: 1.2rem;
+                padding: 8px 20px;
+            }
+            
+            .result-details {
+                padding: 15px;
+            }
+            
+            .category-score {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .result-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .result-buttons .btn {
+                width: 100%;
+                max-width: 250px;
+            }
+            
+            .btn {
+                padding: 10px 15px;
+                font-size: 1rem;
+            }
+            
+            .btn-start {
+                padding: 12px 30px;
+                font-size: 1.1rem;
+            }
+            
+            /* Perbaikan tata letak tombol hasil di handphone */
+            .result-buttons .btn {
+                width: 100%;
+                max-width: 250px;
+            }
+            
+            /* Test footer di handphone */
+            .test-footer {
+                position: sticky;
+                bottom: 0;
+                background-color: white;
+                z-index: 100;
+                padding: 15px 0;
+                margin-top: 20px;
+            }
+            
+            .test-footer .btn {
+                margin-bottom: 8px;
+            }
+            
+            .test-footer .btn:last-child {
+                margin-bottom: 0;
+            }
+        }
+        
+        /* Handphone Sangat Kecil */
+        @media (max-width: 360px) {
+            .nav-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .question-text {
+                font-size: 1rem;
+            }
+            
+            .option-text {
+                font-size: 0.85rem;
+            }
+        }
+        
+        /* Handphone Landscape */
+        @media (max-width: 767px) and (orientation: landscape) {
+            .question-nav {
+                max-height: 120px;
+                padding: 8px;
+            }
+            
+            .nav-grid {
+                grid-template-columns: repeat(10, 1fr);
+                gap: 4px;
+            }
+            
+            .nav-item {
+                height: 30px;
+                font-size: 0.8rem;
+            }
+            
+            .test-content {
+                max-height: 85vh;
+                overflow-y: auto;
+            }
+            
+            /* Smooth scrolling untuk mobile */
+            .question-nav {
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .test-content {
+                scroll-behavior: smooth;
+            }
+        }
+        
+        /* Desktop - Grid navigasi untuk layar lebar */
+        @media (min-width: 1200px) {
+            .nav-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+        
+        /* Desktop Sedang */
+        @media (max-width: 1199px) and (min-width: 769px) {
+            .nav-grid {
+                grid-template-columns: repeat(8, 1fr);
+            }
+        }
+        
+        /* Mencegah gambar atau elemen lain tidak menyebabkan overflow */
+        img, video, iframe {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Utama (hanya ditampilkan di menu utama) -->
+        <div class="header">
+            <h1>TES KARAKTERISTIK PRIBADI</h1>
+            <h2>Simulasi TKP Calon Taruna Akademi TNI</h2>
+        </div>
+        
+        <!-- Menu Utama -->
+        <div id="main-menu">
+            <div class="menu-info">
+                <h3>Informasi Tes</h3>
+                <div class="info-item">
+                    <div class="info-label">Durasi Pengerjaan:</div>
+                    <div class="info-value">60 menit</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Jumlah Soal:</div>
+                    <div class="info-value">50 soal</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Passing Grade:</div>
+                    <div class="info-value">166 poin (Minimum untuk dinyatakan MS)</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Sistem Penilaian:</div>
+                    <div class="info-value">Setiap jawaban memiliki nilai 1-5 poin</div>
+                </div>
+            </div>
+            
+            <h3 style="color: #1a365d; margin-bottom: 15px;">Kategori Soal</h3>
+            <div class="categories-grid">
+                <div class="category-card">
+                    <h4>Kepemimpinan</h4>
+                    <p>10 soal tentang kemampuan memimpin dan mengambil keputusan</p>
+                </div>
+                <div class="category-card">
+                    <h4>Kerjasama Tim</h4>
+                    <p>10 soal tentang kemampuan bekerja dalam tim</p>
+                </div>
+                <div class="category-card">
+                    <h4>Integritas</h4>
+                    <p>10 soal tentang kejujuran dan konsistensi</p>
+                </div>
+                <div class="category-card">
+                    <h4>Ketahanan Mental</h4>
+                    <p>10 soal tentang ketahanan dalam tekanan</p>
+                </div>
+                <div class="category-card">
+                    <h4>Disiplin</h4>
+                    <p>10 soal tentang kedisiplinan dan kepatuhan</p>
+                </div>
+            </div>
+            
+            <p style="margin: 25px 0; text-align: center; color: #4a5568;">
+                <strong>Perhatian:</strong> Kerjakan soal secara teliti dan kelola waktu pengerjaan dengan efektif.
+            </p>
+            
+            <button class="btn btn-start" id="start-test">MULAI TES</button>
+        </div>
+        
+        <!-- Halaman Tes -->
+        <div id="test-page">
+            <!-- Header disembunyikan saat tes berjalan -->
+            <div class="header" style="display: none;">
+                <h1>TES TKP CATAR AKADEMI TNI</h1>
+                <h2>Uji Karakteristik Pribadi Calon Taruna</h2>
+                <div class="passing-grade">Passing Grade: 166 poin</div>
+            </div>
+            
+            <div class="test-header">
+                <div>
+                    <!-- Teks "TKP CATAR Akademi TNI" disembunyikan -->
+                    <h2 style="display: none;">Tes TKP CATAR Akademi TNI</h2>
+                    <div class="question-counter" id="question-counter">Soal 1 dari 50</div>
+                </div>
+                <div class="timer" id="timer">60:00</div>
+            </div>
+            
+            <div class="test-content">
+                <!-- Navigasi Soal -->
+                <div class="question-nav">
+                    <!-- Teks "Navigasi Soal" disembunyikan -->
+                    <h3 style="display: none;">Navigasi Soal</h3>
+                    <div class="nav-grid" id="question-navigation">
+                        <!-- Navigasi soal akan di-generate oleh JavaScript -->
+                    </div>
+                </div>
+                
+                <!-- Area Soal -->
+                <div class="question-area">
+                    <div class="question-category" id="question-category">Kategori: Kepemimpinan</div>
+                    <div class="question-number" id="question-number">Soal 1</div>
+                    <div class="question-text" id="question-text">
+                        <!-- Pertanyaan akan dimuat di sini -->
+                    </div>
+                    
+                    <div class="options-grid" id="options-container">
+                        <!-- Opsi jawaban akan dimuat di sini -->
+                    </div>
+                    
+                    <div class="test-footer">
+                        <button class="btn" id="prev-btn">Sebelumnya</button>
+                        <button class="btn btn-disabled" id="submit-btn" disabled>Submit Jawaban</button>
+                        <button class="btn" id="next-btn">Selanjutnya</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Halaman Hasil -->
+        <div id="result-page">
+            <div class="result-container">
+                <h2 class="result-title">HASIL TES TKP</h2>
+                <div class="score-display" id="final-score">0</div>
+                <div class="result-status" id="result-status">TMS</div>
+                
+                <div class="result-details">
+                    <h3>Detail Nilai per Kategori</h3>
+                    <div id="category-scores">
+                        <!-- Detail nilai per kategori akan dimuat di sini -->
+                    </div>
+                </div>
+                
+                <!-- Teks result message disembunyikan -->
+                <div class="result-message" id="result-message" style="display: none;">
+                    <!-- Pesan hasil akan dimuat di sini -->
+                </div>
+                
+                <div class="result-buttons">
+                    <button class="btn" id="back-to-menu">Kembali ke Menu Utama</button>
+                    <!-- Tombol "Ulangi Tes" disembunyikan -->
+                    <button class="btn" id="retry-test" style="display: none;">Ulangi Tes</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-note">
+            Simulasi TKP Calon Taruna Akademi TNI © 2026 Binara Academy. Hak cipta dilindungi undang-undang.<br>
+        </div>
+    </div>
+
+    <script>
+        // Database soal TKP HOTS untuk Calon Perwira/Perwira (5 kategori x 10 soal)
+const questionDatabase = {
+    "Kepemimpinan Militer": [
+        {
+            question: "Sebagai komandan peleton yang baru dilantik, Anda menghadapi situasi di mana dua anggota peleton Anda yang sama-sama berpengalaman memiliki pendekatan berbeda dalam melaksanakan tugas. Satu mengutamakan ketepatan prosedur sementara yang lain mengutamakan efisiensi waktu. Ketegangan mulai terasa di antara mereka. Langkah pertama yang akan Anda ambil untuk menjaga kohesi peleton adalah:",
+            options: [
+                { text: "Memanggil keduanya secara terpisah dan menegaskan bahwa sebagai komandan Anda akan mengambil keputusan final tanpa diskusi lebih lanjut", points: 2 },
+                { text: "Mengadakan apel kecil dan menegaskan pentingnya persatuan tanpa membahas perbedaan pendekatan secara spesifik", points: 3 },
+                { text: "Mengobservasi kedua pendekatan dalam beberapa tugas sebelum mengambil keputusan tentang metode mana yang lebih efektif", points: 4 },
+                { text: "Mengadakan diskusi terbuka dengan seluruh peleton untuk membahas kelebihan dan kekurangan masing-masing pendekatan, kemudian menyepakati standar operasional", points: 5 },
+                { text: "Memisahkan kedua anggota tersebut ke dalam regu yang berbeda untuk mengurangi interaksi langsung", points: 1 }
+            ]
+        },
+        {
+            question: "Dalam latihan tempur gabungan, satuan Anda mendapat misi yang hampir mustahil diselesaikan dalam waktu yang ditentukan. Atasan menekankan bahwa misi ini sangat penting bagi penilaian kesatuan. Analisis awal menunjukkan tingkat kegagalan 70%. Sebagai perwira muda, keputusan terbaik Anda adalah:",
+            options: [
+                { text: "Melaksanakan misi sesuai perintah dengan memberikan briefing kepada anak buah tentang tantangan yang dihadapi", points: 3 },
+                { text: "Menyampaikan kekhawatiran kepada atasan dengan data analisis risiko dan mengusulkan modifikasi misi yang lebih realistis", points: 5 },
+                { text: "Meminta tambahan personel dan perlengkapan untuk meningkatkan peluang keberhasilan", points: 4 },
+                { text: "Fokus menyelesaikan bagian misi yang mungkin dicapai dan mengabaikan komponen yang terlalu berisiko", points: 2 },
+                { text: "Melaksanakan misi sepenuhnya dengan motivasi tinggi meski mengetahui kemungkinan gagal", points: 1 }
+            ]
+        },
+        {
+            question: "Sebagai Danunit, Anda mengetahui bahwa salah satu bintara terbaik di unit memiliki masalah pribadi yang mulai mempengaruhi kinerjanya. Dia adalah contoh bagi yang lain, namun performanya menurun. Pendekatan yang paling tepat untuk menangani situasi ini adalah:",
+            options: [
+                { text: "Memberikan teguran di depan unit sebagai peringatan bahwa masalah pribadi tidak boleh mengganggu tugas", points: 1 },
+                { text: "Memanggilnya ke ruangan Anda, mendengarkan permasalahannya, dan bersama-sama mencari solusi", points: 5 },
+                { text: "Memindahkannya sementara ke tugas administratif sampai masalah pribadi terselesaikan", points: 3 },
+                { text: "Mengabaikan penurunan performa sementara dengan harapan dia bisa menyelesaikan masalahnya sendiri", points: 2 },
+                { text: "Meminta bantuan psikolog satuan untuk menangani masalahnya tanpa melibatkan diri secara langsung", points: 4 }
+            ]
+        },
+        {
+            question: "Dalam penugasan di daerah terpencil, Anda harus mengambil keputusan cepat terkait penggunaan dana operasional yang terbatas untuk dua kebutuhan mendesak: perbaikan peralatan komunikasi dan pengadaan obat-obatan dasar. Keduanya vital namun dana hanya cukup untuk satu. Keputusan Anda didasarkan pada:",
+            options: [
+                { text: "Prioritas keselamatan jiwa dengan memilih pengadaan obat-obatan", points: 4 },
+                { text: "Konsultasi cepat dengan anggota lain untuk mengambil keputusan bersama", points: 5 },
+                { text: "Perintah terakhir dari komandan sebelum berangkat ke lokasi", points: 3 },
+                { text: "Pertimbangan jangka panjang dengan memilih perbaikan komunikasi", points: 2 },
+                { text: "Memecah dana untuk kedua kebutuhan meski tidak optimal", points: 1 }
+            ]
+        },
+        {
+            question: "Sebagai perwira penghubung dengan masyarakat sipil, Anda dihadapkan pada tuntutan warga yang meminta bantuan di luar mandat satuan. Situasi ini rentan konflik jika tidak ditangani dengan baik. Pendekatan terbaik Anda adalah:",
+            options: [
+                { text: "Menolak tegas dengan menjelaskan batasan kewenangan satuan untuk menghindari ekspektasi berlebihan", points: 3 },
+                { text: "Mendengarkan keluhan mereka dengan empati kemudian mengkoordinasikan dengan instansi terkait yang berwenang", points: 5 },
+                { text: "Membantu sesuai kemampuan tanpa melaporkan kepada atasan untuk menghindari birokrasi", points: 2 },
+                { text: "Mengalihkan pembicaraan ke masalah lain yang bisa ditangani satuan", points: 1 },
+                { text: "Melaporkan kepada atasan dan menunggu instruksi tanpa mengambil inisiatif", points: 4 }
+            ]
+        },
+        {
+            question: "Anda mendapat laporan bahwa seorang prajurit melakukan pelanggaran disiplin ringan namun dia adalah prajurit berprestasi dengan catatan baik. Beberapa rekan meminta Anda memberi keringanan. Sikap Anda sebagai pemimpin adalah:",
+            options: [
+                { text: "Memberikan sanksi sesuai aturan tanpa memandang prestasi untuk menjaga konsistensi", points: 5 },
+                { text: "Memberi peringatan lisan dan memintanya memperbaiki diri tanpa sanksi tertulis", points: 4 },
+                { text: "Mengabaikan laporan mengingat kontribusi positifnya selama ini", points: 1 },
+                { text: "Memberi sanksi lebih ringan dari yang seharusnya sebagai bentuk apresiasi prestasinya", points: 2 },
+                { text: "Menunda keputusan sampai Anda berkonsultasi dengan atasan", points: 3 }
+            ]
+        },
+        {
+            question: "Dalam operasi gabungan dengan satuan lain, terjadi perbedaan interpretasi perintah antara satuan Anda dengan satuan lain yang setingkat. Waktu sangat terbatas dan koordinasi dengan komando atas tidak memungkinkan. Keputusan terbaik Anda adalah:",
+            options: [
+                { text: "Berdasarkan pengalaman dan pengetahuan situasi medan, mengambil keputusan yang menurut Anda paling tepat", points: 4 },
+                { text: "Mengadakan rapat cepat dengan perwira satuan lain untuk menyamakan persepsi sebelum bertindak", points: 5 },
+                { text: "Mempertahankan interpretasi satuan Anda dan meminta satuan lain mengikuti", points: 2 },
+                { text: "Mengikuti interpretasi satuan lain untuk menghindari konflik yang bisa menggagalkan misi", points: 1 },
+                { text: "Menunggu sampai komunikasi dengan komando atas pulih meski harus mengorbankan momentum", points: 3 }
+            ]
+        },
+        {
+            question: "Sebagai perwira pembina di pendidikan pertama, Anda menemukan bahwa sistem penilaian yang berlaku kurang mencerminkan kemampuan sebenarnya taruna. Beberapa taruna pandai secara teori tetapi lemah dalam aplikasi lapangan, sementara yang lain sebaliknya. Usulan perbaikan Anda adalah:",
+            options: [
+                { text: "Mengusulkan sistem penilaian terintegrasi yang mencakup aspek teori, praktik, kepemimpinan, dan karakter", points: 5 },
+                { text: "Mempertahankan sistem yang ada karena telah teruji dalam waktu lama", points: 1 },
+                { text: "Mengusulkan penambahan bobot penilaian praktik lapangan yang lebih besar", points: 4 },
+                { text: "Membuat sistem penilaian alternatif untuk diterapkan secara paralel dengan sistem utama", points: 3 },
+                { text: "Memberikan rekomendasi khusus untuk taruna tertentu tanpa mengubah sistem umum", points: 2 }
+            ]
+        },
+        {
+            question: "Dalam penugasan perdamaian di luar negeri, Anda menghadapi dilema antara mematuhi aturan engagement yang ketat dengan situasi di lapangan yang membutuhkan respons lebih fleksibel untuk menyelamatkan nyawa sipil. Keputusan Anda:",
+            options: [
+                { text: "Tetap mematuhi aturan engagement secara ketat untuk menghindari konsekuensi hukum internasional", points: 3 },
+                { text: "Mengambil inisiatif berdasarkan penilaian situasi dengan mempertimbangkan prinsip kemanusiaan", points: 4 },
+                { text: "Mencoba menghubungi komando untuk instruksi lebih lanjut sebelum bertindak", points: 5 },
+                { text: "Mengikuti contoh perwira senior yang lebih berpengalaman dalam situasi serupa", points: 2 },
+                { text: "Menghindari situasi yang berpotensi melanggar aturan engagement meski ada korban sipil", points: 1 }
+            ]
+        },
+        {
+            question: "Sebagai komandan satuan yang akan menjalani inspeksi mendadak oleh atasan, Anda mengetahui ada beberapa kekurangan dalam administrasi dan kesiapan material. Waktu hanya 48 jam sebelum inspeksi. Strategi terbaik Anda adalah:",
+            options: [
+                { text: "Memfokuskan semua sumber daya untuk memperbaiki administrasi dan menyiapkan material sebaik mungkin", points: 4 },
+                { text: "Mempersiapkan satuan dalam kondisi apa adanya sambil menyiapkan penjelasan untuk setiap kekurangan", points: 5 },
+                { text: "Meminta penundaan inspeksi dengan alasan kesiapan yang belum optimal", points: 1 },
+                { text: "Hanya memperbaiki hal-hal yang paling mudah dikerjakan dalam waktu singkat", points: 2 },
+                { text: "Memfokuskan pada penampilan fisik satuan dan mengabaikan administrasi", points: 3 }
+            ]
+        }
+    ],
+    "Integritas dan Etika Militer": [
+        {
+            question: "Sebagai ajudan komandan, Anda mengetahui bahwa keluarga komandan menggunakan fasilitas dinas untuk keperluan pribadi dalam skala besar. Komandan sendiri tidak terlibat langsung namun mengetahui hal tersebut. Tindakan terbaik Anda adalah:",
+            options: [
+                { text: "Mengabaikan karena sebagai ajudan loyalitas utama adalah kepada komandan", points: 1 },
+                { text: "Menyampaikan secara halus kepada komandan tentang batasan penggunaan fasilitas dinas", points: 5 },
+                { text: "Melaporkan kepada inspektorat tanpa memberi tahu komandan terlebih dahulu", points: 3 },
+                { text: "Membuat catatan rahasia sebagai bukti jika diperlukan di masa depan", points: 2 },
+                { text: "Mengatur penggunaan fasilitas agar tetap dalam batas wajar tanpa melapor", points: 4 }
+            ]
+        },
+        {
+            question: "Dalam proses pengadaan barang untuk satuan, Anda mendapat tawaran 'insentif' dari calon rekanan jika kontrak diberikan kepada mereka. Nilai insentif cukup signifikan dan rekanan menjamin tidak akan ada yang tahu. Respons Anda:",
+            options: [
+                { text: "Menolak tegas dan melaporkan tawaran tersebut kepada atasan dan fungsi pengawasan", points: 5 },
+                { text: "Menolak dengan sopan tanpa melaporkan agar tidak merusak hubungan dengan dunia usaha", points: 3 },
+                { text: "Menerima sambil memastikan barang yang disuplai berkualitas baik", points: 1 },
+                { text: "Menggunakan insentif tersebut untuk kepentingan satuan tanpa melaporkan", points: 2 },
+                { text: "Membuat laporan tertulis tentang tawaran tersebut untuk arsip pribadi", points: 4 }
+            ]
+        },
+        {
+            question: "Anda menemukan dokumen rahasia tercecer di ruang kerja yang seharusnya tersimpan dengan pengamanan ketat. Setelah diperiksa, dokumen tersebut adalah rencana operasi yang sangat sensitif. Tindakan pertama yang harus Anda lakukan adalah:",
+            options: [
+                { text: "Mengambil dan mengamankan dokumen, lalu melapor kepada atasan langsung dan fungsi keamanan", points: 5 },
+                { text: "Mengembalikan dokumen ke tempat penyimpanan tanpa melapor untuk menghindari masalah bagi penanggung jawab", points: 2 },
+                { text: "Membaca dokumen terlebih dahulu untuk memastikan tingkat kerahasiaannya", points: 1 },
+                { text: "Memberitahu penanggung jawab dokumen secara personal agar diperbaiki penyimpanannya", points: 4 },
+                { text: "Melaporkan kepada atasan tanpa menyentuh dokumen tersebut", points: 3 }
+            ]
+        },
+        {
+            question: "Sebagai perwira yang bertugas di daerah perbatasan, Anda dihadapkan pada budaya 'pemberian tanda terima kasih' dari masyarakat setempat yang sudah menjadi tradisi. Nilainya kecil tetapi berpotensi dianggap suap. Sikap Anda:",
+            options: [
+                { text: "Menolak semua pemberian dengan tegas untuk menghindari salah tafsir", points: 3 },
+                { text: "Menerima dengan catatan diberikan kepada satuan secara kolektif, bukan pribadi", points: 4 },
+                { text: "Menerima dalam batas nilai tertentu sebagai bentuk penghormatan kepada budaya lokal", points: 2 },
+                { text: "Menolak dengan penjelasan etika militer sambil tetap menghargai maksud baik mereka", points: 5 },
+                { text: "Menerima dan mendistribusikan kepada prajurit yang membutuhkan", points: 1 }
+            ]
+        },
+        {
+            question: "Dalam penyelidikan internal, Anda diminta memberikan kesaksian tentang insiden yang melibatkan rekan dekat. Anda mengetahui fakta yang dapat membebaskan dia, tetapi juga fakta lain yang bisa memberatkan. Pernyataan Anda sebaiknya:",
+            options: [
+                { text: "Hanya menyampaikan fakta yang membebaskan untuk menjaga persahabatan", points: 1 },
+                { text: "Menyampaikan semua fakta secara objektif tanpa memihak", points: 5 },
+                { text: "Mengatakan tidak mengetahui detail insiden untuk menghindari konflik", points: 2 },
+                { text: "Menyampaikan fakta dengan penekanan pada hal-hal yang membebaskan", points: 3 },
+                { text: "Berkonsultasi dengan rekan tersebut sebelum memberikan kesaksian", points: 4 }
+            ]
+        },
+        {
+            question: "Anda melihat atasan langsung melakukan pelanggaran protokol keamanan ringan yang berpotensi membahayakan keselamatan satuan. Atasan tersebut dikenal tegas dan tidak terbuka terhadap kritik. Pendekatan terbaik adalah:",
+            options: [
+                { text: "Mengabaikan karena atasan pasti memiliki pertimbangan tertentu", points: 1 },
+                { text: "Mengingatkan secara halus dengan menyampaikan risiko yang mungkin terjadi", points: 5 },
+                { text: "Melaporkan kepada atasan yang lebih tinggi tanpa konfrontasi langsung", points: 3 },
+                { text: "Mendokumentasikan pelanggaran sebagai bukti jika terjadi insiden", points: 2 },
+                { text: "Membahas dengan rekan sejawat untuk bersama-sama mengingatkan atasan", points: 4 }
+            ]
+        },
+        {
+            question: "Sebagai penanggung jawab logistik satuan, Anda menemukan selisih stok barang konsumsi antara fisik dan administrasi. Selisih tersebut bisa ditutup dengan berbagai cara tanpa ada yang mengetahui. Langkah yang Anda ambil:",
+            options: [
+                { text: "Melakukan audit ulang untuk memastikan ketepatan data sebelum mengambil tindakan", points: 5 },
+                { text: "Menyesuaikan administrasi dengan kondisi fisik tanpa melapor", points: 1 },
+                { text: "Melapor kepada atasan dan bersedia bertanggung jawab atas selisih tersebut", points: 4 },
+                { text: "Mencari cara untuk menutup selisih dengan dana lain yang tersedia", points: 2 },
+                { text: "Membuat laporan resmi dengan rekomendasi perbaikan sistem", points: 3 }
+            ]
+        },
+        {
+            question: "Dalam penugasan operasi, Anda mendapat perintah yang menurut penilaian Anda melanggar hukum humaniter internasional. Perintah diberikan secara lisan tanpa bukti tertulis. Sikap Anda:",
+            options: [
+                { text: "Melaksanakan perintah dengan pemahaman bahwa atasan bertanggung jawab", points: 1 },
+                { text: "Meminta konfirmasi tertulis sebelum melaksanakan perintah", points: 5 },
+                { text: "Melaksanakan perintah dengan modifikasi untuk mengurangi pelanggaran", points: 2 },
+                { text: "Berkonsultasi dengan perwira hukum satuan sebelum bertindak", points: 4 },
+                { text: "Menyampaikan keberatan secara langsung kepada pemberi perintah", points: 3 }
+            ]
+        },
+        {
+            question: "Sebagai komandan satuan kecil di daerah terpencil, Anda memiliki wewenang penuh atas penggunaan anggaran operasional. Terdapat celah dalam sistem yang memungkinkan Anda menggunakan dana untuk keperluan pribadi tanpa mudah terdeteksi. Sikap Anda:",
+            options: [
+                { text: "Memanfaatkan celah tersebut dengan pertimbangan sebagai kompensasi atas kerasnya penugasan", points: 1 },
+                { text: "Menggunakan untuk kepentingan satuan yang lebih luas meski tidak sesuai prosedur", points: 3 },
+                { text: "Melaporkan celah sistem kepada atasan dan menyarankan perbaikan", points: 5 },
+                { text: "Tidak menggunakan celah tersebut tetapi juga tidak melaporkannya", points: 2 },
+                { text: "Menggunakan secara minimal dengan catatan pengembalian di masa depan", points: 4 }
+            ]
+        },
+        {
+            question: "Anda mengetahui bahwa laporan kinerja satuan yang dibuat atasan mengandung pembesaran pencapaian tertentu. Atasan meminta Anda untuk mensahkan laporan tersebut sebagai bagian dari staf. Tindakan Anda:",
+            options: [
+                { text: "Menyetujui laporan dengan catatan internal tentang ketidakakuratan", points: 2 },
+                { text: "Menolak menandatangani dan menyampaikan keberatan secara tertulis", points: 5 },
+                { text: "Meminta revisi pada bagian yang tidak akurat sebelum menyetujui", points: 4 },
+                { text: "Menyetujui dengan pertimbangan menjaga nama baik satuan", points: 1 },
+                { text: "Mendelegasikan penandatanganan kepada staf lain", points: 3 }
+            ]
+        }
+    ],
+    "Ketahanan Mental dan Fisik": [
+        {
+            question: "Dalam latihan tempur yang berlangsung 72 jam non-stop, Anda mengalami kelelahan ekstrem dan mulai kehilangan fokus. Sebagai komandan regu, Anda harus tetap memimpin dengan efektif. Strategi untuk menjaga performa adalah:",
+            options: [
+                { text: "Memaksakan diri bekerja lebih keras dengan motivasi bahwa latihan akan segera berakhir", points: 2 },
+                { text: "Mendelegasikan sebagian keputusan kepada wakil sambil tetap mengawasi secara umum", points: 5 },
+                { text: "Meminta jeda sejenak dari pelatih untuk istirahat singkat", points: 4 },
+                { text: "Mengurangi standar operasi untuk menghemat energi", points: 1 },
+                { text: "Bergantung sepenuhnya pada kemampuan anggota regu yang lain", points: 3 }
+            ]
+        },
+        {
+            question: "Setelah mengalami kegagalan dalam ujian kenaikan pangkat, Anda merasa kecewa karena telah mempersiapkan dengan maksimal. Beberapa rekan mulai meragukan kemampuan Anda. Sikap untuk bangkit dari situasi ini:",
+            options: [
+                { text: "Mengambil cuti untuk evaluasi diri dan menyusun strategi baru", points: 4 },
+                { text: "Langsung mempersiapkan diri untuk ujian berikutnya dengan intensitas lebih tinggi", points: 5 },
+                { text: "Mencari pelampiasan dengan kegiatan di luar dinas untuk melupakan kekecewaan", points: 1 },
+                { text: "Meminta penjelasan detail tentang kekurangan untuk perbaikan spesifik", points: 3 },
+                { text: "Mengalihkan fokus ke bidang lain di mana Anda lebih unggul", points: 2 }
+            ]
+        },
+        {
+            question: "Sebagai perwira yang bertugas di daerah konflik, Anda menyaksikan peristiwa traumatis yang melibatkan korban sipil. Gejala stres pascatrauma mulai muncul. Langkah yang paling tepat untuk menanganinya:",
+            options: [
+                { text: "Mengabaikan gejala dengan anggapan sebagai hal normal dalam penugasan operasi", points: 1 },
+                { text: "Berbagi pengalaman dengan rekan sejawat yang mengalami situasi serupa", points: 4 },
+                { text: "Mencari bantuan profesional dari psikolog militer tanpa merasa rendah diri", points: 5 },
+                { text: "Meningkatkan aktivitas fisik untuk mengalihkan pikiran dari kejadian tersebut", points: 3 },
+                { text: "Meminta mutasi ke penugasan non-operasi sampai pulih sepenuhnya", points: 2 }
+            ]
+        },
+        {
+            question: "Dalam pendidikan lanjut, Anda menghadapi tekanan akademik yang sangat tinggi ditambah tuntutan fisik yang berat. Beberapa teman memilih cara tidak etis untuk bertahan. Sikap Anda menghadapi tekanan tersebut:",
+            options: [
+                { text: "Mencari bimbingan tambahan dari pengajar dan mengatur ulang strategi belajar", points: 5 },
+                { text: "Bergabung dengan kelompok belajar untuk saling mendukung secara positif", points: 4 },
+                { text: "Fokus pada bidang yang paling dikuasai dan mengabaikan yang lain", points: 2 },
+                { text: "Mengikuti cara tidak etis hanya untuk mata pelajaran yang paling sulit", points: 1 },
+                { text: "Meminta keringanan beban akademik dengan alasan kesehatan", points: 3 }
+            ]
+        },
+        {
+            question: "Setelah menjalani operasi medis, dokter menyarankan cuti panjang untuk pemulihan. Namun, satuan Anda sedang mempersiapkan penugasan penting yang membutuhkan keahlian khusus Anda. Keputusan terbaik:",
+            options: [
+                { text: "Mengikuti penugasan dengan memodifikasi peran sesuai kondisi fisik", points: 3 },
+                { text: "Mengambil cuti sesuai anjuran dokter dan melatih pengganti untuk penugasan", points: 5 },
+                { text: "Mengurangi waktu cuti untuk bisa bergabung dalam penugasan", points: 2 },
+                { text: "Mengikuti penugasan dengan menyembunyikan kondisi fisik dari atasan", points: 1 },
+                { text: "Meminta penugasan lain yang tidak terlalu berat setelah cuti", points: 4 }
+            ]
+        },
+        {
+            question: "Sebagai komandan yang baru mengalami kegagalan operasi dengan korban jiwa, Anda diliputi rasa bersalah dan tekanan dari keluarga korban. Media juga mulai memberitakan negatif. Cara terbaik mengatasi situasi ini:",
+            options: [
+                { text: "Mengambil cuti panjang untuk menghindari kontak dengan publik dan media", points: 1 },
+                { text: "Bekerja sama dengan fungsi hubungan masyarakat untuk penjelasan yang tepat", points: 4 },
+                { text: "Melakukan evaluasi menyeluruh dan berkomunikasi terbuka dengan keluarga korban", points: 5 },
+                { text: "Menyalahkan faktor eksternal di luar kendali untuk membela keputusan yang diambil", points: 2 },
+                { text: "Fokus pada tugas-tugas administratif sambil menunggu situasi mereda", points: 3 }
+            ]
+        },
+        {
+            question: "Dalam latihan survival sendirian di alam liar, Anda mengalami disorientasi dan kehilangan sebagian perbekalan. Waktu masih tersisa 48 jam sebelum tim evakuasi datang. Strategi bertahan terbaik:",
+            options: [
+                { text: "Tetap berpindah tempat untuk mencari jalur evakuasi dengan risiko kehilangan lebih banyak energi", points: 2 },
+                { text: "Mencari lokasi aman, mengonservasi energi, dan membuat sinyal untuk tim evakuasi", points: 5 },
+                { text: "Berusaha menemukan kembali perbekalan yang hilang meski harus menjelajah lebih jauh", points: 1 },
+                { text: "Meninggalkan lokasi latihan untuk mencari pertolongan dari masyarakat terdekat", points: 3 },
+                { text: "Menunggu di tempat terakhir memiliki orientasi dengan berharap tim menemukan Anda", points: 4 }
+            ]
+        },
+        {
+            question: "Setahun bertugas di daerah konflik intensitas tinggi, Anda mulai mengalami mati rasa emosional terhadap penderitaan orang lain. Sebagai perwira yang harus tetap memegang nilai kemanusiaan, langkah yang diambil:",
+            options: [
+                { text: "Menganggap reaksi tersebut normal sebagai mekanisme pertahanan psikologis", points: 3 },
+                { text: "Mencari konseling untuk mengembalikan empati tanpa kehilangan ketegasan profesional", points: 5 },
+                { text: "Meminta rotasi penugasan ke daerah yang lebih stabil", points: 4 },
+                { text: "Meningkatkan intensitas ibadah untuk mengembalikan keseimbangan spiritual", points: 2 },
+                { text: "Mengabaikan gejala tersebut sebagai bagian dari proses penyesuaian", points: 1 }
+            ]
+        },
+        {
+            question: "Sebagai atlet prajurit yang mewakili TNI di kejuaraan nasional, Anda mengalami cedera beberapa minggu sebelum pertandingan penting. Dokter melarang latihan berat tetapi pelatih menekankan pentingnya pertandingan ini. Keputusan Anda:",
+            options: [
+                { text: "Mengikuti saran dokter dan fokus pada pemulihan untuk jangka panjang", points: 5 },
+                { text: "Tetap latihan dengan intensitas ringan dan berharap cedera tidak bertambah parah", points: 3 },
+                { text: "Menggunakan obat pereda nyeri untuk bisa latihan normal", points: 1 },
+                { text: "Meminta penundaan pertandingan dengan alasan medis resmi", points: 4 },
+                { text: "Tetap bertanding dengan risiko memperparah cedera demi kehormatan satuan", points: 2 }
+            ]
+        },
+        {
+            question: "Setelah promosi ke pangkat yang lebih tinggi, Anda merasa tidak siap dengan beban tanggung jawab dan tekanan ekspektasi yang datang. Gejala kecemasan mulai mengganggu kinerja. Pendekatan terbaik:",
+            options: [
+                { text: "Menyembunyikan kecemasan dan belajar sendiri tanpa meminta bantuan", points: 1 },
+                { text: "Mencari mentor dari perwira senior yang pernah mengalami fase serupa", points: 5 },
+                { text: "Meminta kembali ke posisi sebelumnya sampai merasa lebih siap", points: 2 },
+                { text: "Mendelegasikan sebagian besar tanggung jawab kepada bawahan", points: 3 },
+                { text: "Mengikuti pelatihan kepemimpinan tambahan untuk meningkatkan kapasitas", points: 4 }
+            ]
+        }
+    ],
+    "Kerjasama dan Komunikasi": [
+        {
+            question: "Sebagai perwira penghubung dengan satuan dari angkatan lain, Anda menemukan perbedaan doktrin dan prosedur yang signifikan. Kerja sama terganggu karena saling mempertahankan cara masing-masing. Langkah membangun sinergi:",
+            options: [
+                { text: "Memaksa satuan lain mengikuti prosedur satuan Anda karena dianggap lebih baik", points: 1 },
+                { text: "Membuat prosedur operasi gabungan baru yang mengakomodir keunggulan masing-masing", points: 5 },
+                { text: "Melaporkan masalah ke atasan untuk diputuskan secara sepihak", points: 3 },
+                { text: "Mengikuti prosedur satuan lain untuk menghindari konflik lebih lanjut", points: 2 },
+                { text: "Bekerja secara paralel dengan koordinasi minimal untuk menghindari tabrakan prosedur", points: 4 }
+            ]
+        },
+        {
+            question: "Dalam rapat perencanaan operasi, atasan Anda menyampaikan konsep yang menurut analisis tim memiliki kelemahan fatal. Atasan dikenal tidak terbuka terhadap kritik. Cara menyampaikan masukan:",
+            options: [
+                { text: "Menyampaikan langsung di forum rapat dengan data pendukung yang kuat", points: 4 },
+                { text: "Mendekati atasan secara private sebelum rapat dengan alternatif solusi", points: 5 },
+                { text: "Diam saja dan berusaha mengimplementasikan sebaik mungkin", points: 1 },
+                { text: "Menyampaikan melalui perwira senior lain yang lebih dekat dengan atasan", points: 3 },
+                { text: "Membuat catatan tertulis tentang kelemahan konsep untuk arsip pribadi", points: 2 }
+            ]
+        },
+        {
+            question: "Sebagai komandan satuan yang terdiri dari personel dengan latar belakang suku dan agama berbeda, muncul ketegangan terkait perayaan hari besar keagamaan. Kebijakan yang Anda terapkan:",
+            options: [
+                { text: "Melarang semua perayaan keagamaan di lingkungan satuan untuk menjaga netralitas", points: 1 },
+                { text: "Mengizinkan perayaan dalam ruang privat tanpa melibatkan personel lain", points: 3 },
+                { text: "Memfasilitasi perayaan dengan melibatkan seluruh personel sebagai bentuk edukasi multikultural", points: 5 },
+                { text: "Membuat jadwal bergilir untuk perayaan masing-masing kelompok", points: 4 },
+                { text: "Mengikuti tradisi mayoritas sebagai bentuk penghormatan kepada tuan rumah", points: 2 }
+            ]
+        },
+        {
+            question: "Dalam misi kemanusiaan bersama organisasi internasional, terjadi miskomunikasi karena perbedaan bahasa dan protokol. Situasi darurat membutuhkan koordinasi cepat. Strategi komunikasi efektif:",
+            options: [
+                { text: "Menggunakan penerjemah resmi untuk semua komunikasi meski memakan waktu", points: 3 },
+                { text: "Membuat sistem komunikasi sederhana dengan simbol dan istilah standar yang disepakati bersama", points: 5 },
+                { text: "Menunjuk personel yang paling fasih berbahasa asing sebagai satu-satunya penghubung", points: 4 },
+                { text: "Mengandalkan bahasa isyarat dan contoh langsung tanpa diskusi kompleks", points: 2 },
+                { text: "Menunggu panduan dari markas besar masing-masing organisasi", points: 1 }
+            ]
+        },
+        {
+            question: "Sebagai perwira muda di satuan yang didominasi perwira senior, ide-ide pembaruan Anda sering diabaikan dengan alasan 'tidak sesuai tradisi satuan'. Pendekatan untuk mendapat dukungan:",
+            options: [
+                { text: "Menerima bahwa sebagai junior harus mengikuti senior tanpa banyak inovasi", points: 1 },
+                { text: "Mencari dukungan dari perwira senior yang berpikiran progresif terlebih dahulu", points: 5 },
+                { text: "Menerapkan inovasi secara bertahap tanpa mengumumkan terlebih dahulu", points: 2 },
+                { text: "Membuat proposal sangat detail dengan studi kelayakan yang komprehensif", points: 4 },
+                { text: "Mengajukan langsung ke pimpinan satuan melewati rantai komando", points: 3 }
+            ]
+        },
+        {
+            question: "Dalam latihan bersama dengan negara sahabat, terjadi insiden kecil yang dipicu oleh kesalahpahaman budaya. Partner latihan merasa direndahkan, sementara personel Anda merasa diperlakukan tidak adil. Tindakan sebagai perwira penghubung:",
+            options: [
+                { text: "Menyelidiki akar masalah dari kedua perspektif sebelum mengambil tindakan", points: 5 },
+                { text: "Membela personel sendiri untuk menunjukkan solidaritas internal", points: 1 },
+                { text: "Meminta maaf segera untuk meredakan ketegangan tanpa penyelidikan mendalam", points: 3 },
+                { text: "Melaporkan insiden kepada komandan latihan untuk ditangani secara resmi", points: 4 },
+                { text: "Menganggap insiden sebagai hal kecil yang akan terlupakan dengan sendirinya", points: 2 }
+            ]
+        },
+        {
+            question: "Sebagai kepala seksi yang membawahi beberapa subseksi dengan karakter berbeda-beda, Anda kesulitan menyelaraskan kinerja mereka. Beberapa sangat mandiri, lainnya membutuhkan pengawasan ketat. Pendekatan kepemimpinan:",
+            options: [
+                { text: "Memberlakukan sistem pengawasan yang sama ketatnya untuk semua subseksi", points: 2 },
+                { text: "Menerapkan pendekatan berbeda sesuai karakter masing-masing subseksi", points: 5 },
+                { text: "Memindahkan personel antar subseksi untuk menyeimbangkan karakter", points: 4 },
+                { text: "Fokus pada subseksi yang bermasalah dan membiarkan yang lain bekerja mandiri", points: 3 },
+                { text: "Mengadakan rapat maraton sampai semua subseksi sepakat dengan sistem kerja sama", points: 1 }
+            ]
+        },
+        {
+            question: "Dalam penanganan bencana, terjadi tumpang tindih kewenangan antara TNI, Polri, dan instansi sipil. Korban membutuhkan bantuan segera namun koordinasi tidak optimal. Inisiatif yang Anda ambil:",
+            options: [
+                { text: "Membentuk posko komando gabungan sementara dengan perwakilan semua instansi", points: 5 },
+                { text: "Fokus pada area yang menjadi tanggung jawab TNI dan mengabaikan area lain", points: 1 },
+                { text: "Menunggu keputusan dari pemerintah daerah sebagai koordinator resmi", points: 3 },
+                { text: "Bekerja sesuai mandat TNI dan berkoordinasi minimal dengan instansi lain", points: 2 },
+                { text: "Mengambil alih kendali operasi mengingat TNI memiliki kapasitas terbesar", points: 4 }
+            ]
+        },
+        {
+            question: "Sebagai instruktur di sekolah militer, Anda menghadapi taruna yang sangat cerdas tetapi sulit bekerja sama dengan teman seangkatannya. Dia cenderung individualis dan meremehkan kontribusi orang lain. Pendekatan pembinaan:",
+            options: [
+                { text: "Memberi tugas individual saja untuk memaksimalkan potensinya", points: 1 },
+                { text: "Memasangkannya dengan taruna yang membutuhkan bantuan akademik", points: 4 },
+                { text: "Memberi tanggung jawab kepemimpinan dalam kelompok dengan evaluasi khusus", points: 5 },
+                { text: "Menegurnya di depan kelas untuk memberi pelajaran tentang kerja sama", points: 2 },
+                { text: "Membiarkan karena setiap orang memiliki gaya kerja berbeda", points: 3 }
+            ]
+        },
+        {
+            question: "Dalam operasi intelijen gabungan, Anda harus berbagi informasi sensitif dengan agen dari instansi lain yang tidak sepenuhnya Anda percayai. Namun, kerja sama ini penting untuk keberhasilan misi. Strategi berbagi informasi:",
+            options: [
+                { text: "Berbagi informasi selektif dengan prinsip need-to-know yang ketat", points: 5 },
+                { text: "Berbagi semua informasi untuk membangun kepercayaan penuh", points: 1 },
+                { text: "Hanya berbagi informasi setelah mendapat jaminan timbal balik", points: 4 },
+                { text: "Menyamarkan informasi sensitif dengan data pengalih", points: 2 },
+                { text: "Berbagi melalui atasan agar tanggung jawab tidak sepenuhnya pada Anda", points: 3 }
+            ]
+        }
+    ],
+    "Pengambilan Keputusan Taktis": [
+        {
+            question: "Dalam patroli perbatasan, regu Anda bertemu dengan kelompok bersenjata non-negara yang belum teridentifikasi. Mereka menunjukkan sikap tidak bermusuhan namun tetap waspada. Komunikasi terbatas karena perbedaan bahasa. Keputusan taktis pertama:",
+            options: [
+                { text: "Segera menghubungi pos komando untuk instruksi lebih lanjut sambil menjaga jarak aman", points: 5 },
+                { text: "Mendekati untuk identifikasi lebih jelas mengingat mereka tidak menunjukkan sikap bermusuhan", points: 1 },
+                { text: "Mengambil posisi bertahan dan mempersiapkan kemungkinan kontak senjata", points: 4 },
+                { text: "Meninggalkan area untuk menghindari potensi konfrontasi", points: 2 },
+                { text: "Mengirim satu personel sebagai penghubung sementara yang lain mengawal dari jarak aman", points: 3 }
+            ]
+        },
+        {
+            question: "Dalam evakuasi korban bencana, Anda harus memilih antara mengevakuasi kelompok besar yang relatif aman atau kelompok kecil yang terperangkap di zona berbahaya namun membutuhkan pertolongan segera. Sumber daya terbatas. Prioritas Anda:",
+            options: [
+                { text: "Kelompok besar karena jumlah korban yang diselamatkan lebih banyak", points: 3 },
+                { text: "Kelompok kecil karena kondisi lebih kritis dan mendesak", points: 4 },
+                { text: "Membagi sumber daya untuk kedua kelompok meski tidak optimal", points: 2 },
+                { text: "Menganalisis tingkat kesulitan dan peluang keberhasilan masing-masing operasi", points: 5 },
+                { text: "Menunggu bantuan tambahan sebelum memutuskan", points: 1 }
+            ]
+        },
+        {
+            question: "Dalam penyergapan terhadap kelompok ilegal, Anda mendapat informasi bahwa ada wanita dan anak-anak di antara mereka. Serangan langsung berisiko tinggi terhadap warga sipil. Keputusan operasi:",
+            options: [
+                { text: "Menunda operasi sampai konfirmasi lebih akurat tentang keberadaan warga sipil", points: 4 },
+                { text: "Melanjutkan operasi dengan modifikasi taktik untuk meminimalkan risiko warga sipil", points: 5 },
+                { text: "Membatalkan operasi mengingat prinsip proportionality dalam hukum humaniter", points: 3 },
+                { text: "Melakukan operasi seperti rencana awal dengan asumsi informasi tidak akurat", points: 1 },
+                { text: "Mengganti taktik dari penyergapan menjadi pengepungan dan negosiasi", points: 2 }
+            ]
+        },
+        {
+            question: "Dalam misi pengawalan VIP di daerah rawan, konvoi Anda dihadang oleh massa yang memprotes kebijakan pemerintah. Mereka tidak bersenjata tetapi jumlahnya besar dan emosional. Jalur alternatif tidak tersedia. Tindakan terbaik:",
+            options: [
+                { text: "Menerobos massa dengan kendaraan lapis baja untuk menjaga keamanan VIP", points: 1 },
+                { text: "Memutar rute meski harus melalui daerah yang tidak familiar", points: 3 },
+                { text: "Berhenti dan bernegosiasi dengan pemimpin massa sambil mengamankan VIP", points: 5 },
+                { text: "Meminta bantuan pengendalian massa dari kepolisian setempat", points: 4 },
+                { text: "Mengeluarkan VIP dari kendaraan dan menyelundupkannya melalui jalur lain", points: 2 }
+            ]
+        },
+        {
+            question: "Dalam latihan tempur skala besar, sistem komunikasi regu Anda mengalami gangguan total. Anda terpisah dari elemen utama dan harus mencapai titik rally sesuai jadwal. Keputusan navigasi:",
+            options: [
+                { text: "Tetap bergerak ke titik rally sesuai rute yang sudah direncanakan sebelum komunikasi terputus", points: 4 },
+                { text: "Mencari tempat tinggi untuk mendapatkan sinyal komunikasi atau melihat tanda dari elemen utama", points: 5 },
+                { text: "Kembali ke posisi awal dan menunggu instruksi lebih lanjut", points: 2 },
+                { text: "Mencoba menemukan elemen lain yang mungkin juga mengalami masalah serupa", points: 3 },
+                { text: "Menggunakan kompas dan peta untuk mencapai titik rally melalui rute terpendek", points: 1 }
+            ]
+        },
+        {
+            question: "Sebagai komandan pos terdepan, Anda menerima laporan intelijen tentang kemungkinan serangan dini hari. Namun, laporan tersebut belum terkonfirmasi dari sumber lain. Personel sudah kelelahan setelah berjaga-jaga semalaman. Keputusan kesiapan:",
+            options: [
+                { text: "Mempertahankan tingkat kewaspadaan normal untuk mengistirahatkan personel", points: 1 },
+                { text: "Meningkatkan kewaspadaan maksimal meski personel kelelahan", points: 4 },
+                { text: "Membagi personel menjadi dua shift dengan tingkat kewaspadaan berbeda", points: 5 },
+                { text: "Meminta bantuan dari pos terdekat untuk berjaga-jaga bergantian", points: 3 },
+                { text: "Mengandalkan sistem peringatan dini otomatis untuk mengurangi beban personel", points: 2 }
+            ]
+        },
+        {
+            question: "Dalam operasi pencarian dan penyelamatan di laut, Anda harus memilih antara mencari korban di area yang lebih luas dengan kemungkinan temuan rendah atau memusatkan pencarian di area terbatas dengan kemungkinan tinggi namun berisiko melewatkan korban di area lain. Waktu terbatas. Keputusan:",
+            options: [
+                { text: "Membagi sumber daya untuk kedua area dengan prioritas pada area berisiko tinggi", points: 5 },
+                { text: "Fokus pada area terbatas dengan kemungkinan temuan tinggi", points: 4 },
+                { text: "Mencari di area luas untuk memaksimalkan peluang menemukan korban", points: 3 },
+                { text: "Menunggu informasi tambahan sebelum menentukan area pencarian", points: 2 },
+                { text: "Mengikuti pola pencarian standar tanpa modifikasi", points: 1 }
+            ]
+        },
+        {
+            question: "Dalam kontak senjata terbatas, regu Anda berhasil menawan salah satu anggota kelompok lawan yang terluka. Dia membutuhkan pertolongan medis segera namun membawanya akan memperlambat pergerakan regu menuju extraction point. Musuh mungkin melakukan pengejaran. Keputusan:",
+            options: [
+                { text: "Memberikan pertolongan dasar dan membawanya ke extraction point", points: 5 },
+                { text: "Memberikan pertolongan dasar dan meninggalkannya dengan tanda untuk tim medis", points: 4 },
+                { text: "Meninggalkannya untuk menjaga kecepatan pergerakan regu", points: 1 },
+                { text: "Menunggu tim evakuasi medis sebelum bergerak ke extraction point", points: 3 },
+                { text: "Memberikan pertolongan dan menunggu di tempat sampai kondisi stabil", points: 2 }
+            ]
+        },
+        {
+            question: "Dalam operasi penggalangan dukungan masyarakat di daerah konflik, Anda harus memilih antara membangun fasilitas umum yang dibutuhkan banyak orang atau membantu keluarga-keluarga korban secara individual yang lebih terdampak. Dana terbatas. Prioritas:",
+            options: [
+                { text: "Fasilitas umum karena manfaatnya lebih luas dan berjangka panjang", points: 4 },
+                { text: "Bantuan individual karena lebih langsung meringankan penderitaan", points: 3 },
+                { text: "Kombinasi keduanya dengan proporsi sesuai tingkat urgensi", points: 5 },
+                { text: "Membentuk komite masyarakat untuk menentukan prioritas penggunaan dana", points: 2 },
+                { text: "Mengikuti petunjuk atasan tanpa melakukan penilaian mandiri", points: 1 }
+            ]
+        },
+        {
+            question: "Sebagai komandan satuan yang akan melakukan rotasi penugasan, Anda harus memilih personel yang akan dibawa ke penugasan baru dan yang akan ditinggalkan. Beberapa personel kunci sudah lama di satuan dan menjadi tulang punggung. Keputusan:",
+            options: [
+                { text: "Membawa semua personel kunci untuk menjaga kinerja satuan di lokasi baru", points: 2 },
+                { text: "Membiarkan personel kunci di satuan lama untuk menjaga kontinuitas", points: 3 },
+                { text: "Membagi personel kunci antara satuan lama dan baru", points: 5 },
+                { text: "Meminta personel kinci memilih sendiri keinginan mereka", points: 4 },
+                { text: "Mengikuti kebijakan standar rotasi tanpa pertimbangan khusus", points: 1 }
+            ]
+        }
+    ]
+};
+
+        // Variabel state tes
+        let currentQuestionIndex = 0;
+        let answers = new Array(50).fill(null);
+        let timeLeft = 60 * 60; // 60 menit dalam detik
+        let timerInterval;
+        let testStarted = false;
+        let categories = Object.keys(questionDatabase);
+        let questions = [];
+        let questionRandomOrders = {};
+        let testStartTime = null;
+
+        // Fungsi untuk menyimpan progress ke localStorage
+        function saveTestProgress() {
+            const testProgress = {
+                answers: answers,
+                currentQuestionIndex: currentQuestionIndex,
+                timeLeft: timeLeft,
+                testStarted: testStarted,
+                questions: questions,
+                questionRandomOrders: questionRandomOrders,
+                testStartTime: testStartTime,
+                elapsedTime: testStartTime ? Math.floor((Date.now() - testStartTime) / 1000) : 0
+            };
+            localStorage.setItem('tkpTestProgress', JSON.stringify(testProgress));
+        }
+
+        // Fungsi untuk memuat progress dari localStorage
+        function loadTestProgress() {
+            const savedProgress = localStorage.getItem('tkpTestProgress');
+            if (savedProgress) {
+                const progress = JSON.parse(savedProgress);
+                
+                // Hitung sisa waktu yang akurat
+                if (progress.testStartTime && progress.elapsedTime) {
+                    const totalTime = 60 * 60; // 60 menit dalam detik
+                    const elapsedSinceSave = Math.floor((Date.now() - progress.testStartTime) / 1000);
+                    const totalElapsed = progress.elapsedTime + elapsedSinceSave;
+                    progress.timeLeft = Math.max(0, totalTime - totalElapsed);
+                }
+                
+                return progress;
+            }
+            return null;
+        }
+
+        // Fungsi untuk menghapus progress dari localStorage
+        function clearTestProgress() {
+            localStorage.removeItem('tkpTestProgress');
+        }
+
+        // Fungsi untuk mengacak soal
+        function shuffleQuestions() {
+            questions = [];
+            categories.forEach(category => {
+                let categoryQuestions = [...questionDatabase[category]];
+                // Acak urutan soal dalam kategori
+                for (let i = categoryQuestions.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [categoryQuestions[i], categoryQuestions[j]] = [categoryQuestions[j], categoryQuestions[i]];
+                }
+                // Ambil 10 soal pertama setelah diacak
+                categoryQuestions.slice(0, 10).forEach(q => {
+                    questions.push({
+                        ...q,
+                        category: category
+                    });
+                });
+            });
+            // Acak urutan kategori
+            for (let i = questions.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [questions[i], questions[j]] = [questions[j], questions[i]];
+            }
+        }
+
+        // Fungsi untuk mengacak urutan opsi jawaban untuk setiap soal
+        function shuffleOptionsForQuestion(questionIndex) {
+            const question = questions[questionIndex];
+            
+            // Buat array indeks [0,1,2,3,4] dan acak
+            const order = [0, 1, 2, 3, 4];
+            for (let i = order.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [order[i], order[j]] = [order[j], order[i]];
+            }
+            
+            // Simpan urutan acak untuk soal ini
+            questionRandomOrders[questionIndex] = order;
+            
+            // Acak opsi berdasarkan urutan acak
+            const shuffledOptions = order.map(index => question.options[index]);
+            
+            return {
+                ...question,
+                options: shuffledOptions,
+                originalOrder: order
+            };
+        }
+
+        // Fungsi untuk memulai tes
+        function startTest() {
+            shuffleQuestions();
+            document.getElementById('main-menu').style.display = 'none';
+            document.getElementById('test-page').style.display = 'block';
+            
+            // Inisialisasi navigasi soal
+            initQuestionNavigation();
+            
+            // Tampilkan soal pertama
+            showQuestion(currentQuestionIndex);
+            
+            // Mulai timer
+            startTimer();
+            
+            testStarted = true;
+            testStartTime = Date.now();
+            
+            // Update status tombol submit
+            updateSubmitButton();
+            
+            // Simpan progress awal
+            saveTestProgress();
+        }
+
+        // Fungsi untuk memuat tes dari progress yang disimpan
+        function loadTestFromProgress(progress) {
+            // Restore state dari progress
+            answers = progress.answers;
+            currentQuestionIndex = progress.currentQuestionIndex;
+            timeLeft = progress.timeLeft;
+            testStarted = progress.testStarted;
+            questions = progress.questions;
+            questionRandomOrders = progress.questionRandomOrders;
+            testStartTime = Date.now(); // Reset start time untuk perhitungan akurat
+            
+            // Tampilkan halaman tes
+            document.getElementById('main-menu').style.display = 'none';
+            document.getElementById('test-page').style.display = 'block';
+            
+            // Inisialisasi navigasi soal
+            initQuestionNavigation();
+            
+            // Tampilkan soal saat ini
+            showQuestion(currentQuestionIndex);
+            
+            // Mulai timer dengan waktu yang tersisa
+            startTimer();
+            
+            // Update status tombol submit
+            updateSubmitButton();
+        }
+
+        // Fungsi untuk menginisialisasi navigasi soal
+        function initQuestionNavigation() {
+            const navContainer = document.getElementById('question-navigation');
+            navContainer.innerHTML = '';
+            
+            for (let i = 0; i < questions.length; i++) {
+                const navItem = document.createElement('div');
+                navItem.className = 'nav-item';
+                navItem.textContent = i + 1;
+                navItem.dataset.index = i;
+                
+                if (i === currentQuestionIndex) {
+                    navItem.classList.add('active');
+                }
+                
+                navItem.addEventListener('click', () => {
+                    showQuestion(parseInt(navItem.dataset.index));
+                });
+                
+                navContainer.appendChild(navItem);
+            }
+        }
+
+        // Fungsi untuk menampilkan soal
+        function showQuestion(index) {
+            if (index < 0 || index >= questions.length) return;
+            
+            // Update active state di navigasi
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector(`.nav-item[data-index="${index}"]`).classList.add('active');
+            
+            currentQuestionIndex = index;
+            
+            // Acak opsi jika belum diacak untuk soal ini
+            let question;
+            if (questionRandomOrders[index]) {
+                // Gunakan urutan acak yang sudah ada
+                const order = questionRandomOrders[index];
+                const shuffledOptions = order.map(i => questions[index].options[i]);
+                question = {
+                    ...questions[index],
+                    options: shuffledOptions,
+                    originalOrder: order
+                };
+            } else {
+                // Acak opsi untuk pertama kali
+                question = shuffleOptionsForQuestion(index);
+            }
+            
+            // Update tampilan soal
+            document.getElementById('question-counter').textContent = `Soal ${index + 1} dari ${questions.length}`;
+            document.getElementById('question-category').textContent = `Kategori: ${question.category}`;
+            document.getElementById('question-number').textContent = `Soal ${index + 1}`;
+            document.getElementById('question-text').textContent = question.question;
+            
+            // Update opsi jawaban
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+            
+            const optionLetters = ['A', 'B', 'C', 'D', 'E'];
+            
+            question.options.forEach((option, i) => {
+                const optionItem = document.createElement('div');
+                optionItem.className = 'option-item';
+                
+                // Cek apakah jawaban untuk soal ini sudah diisi
+                if (answers[index] !== null) {
+                    // Cari indeks tampilan untuk jawaban yang disimpan
+                    const originalOrder = question.originalOrder;
+                    const displayIndexForAnswer = originalOrder.indexOf(answers[index]);
+                    if (displayIndexForAnswer === i) {
+                        optionItem.classList.add('selected');
+                    }
+                }
+                
+                optionItem.dataset.optionIndex = i;
+                
+                optionItem.innerHTML = `
+                    <div class="option-letter">${optionLetters[i]}</div>
+                    <div class="option-text">${option.text}</div>
+                `;
+                
+                optionItem.addEventListener('click', () => {
+                    // Dapatkan indeks asli dari pilihan ini
+                    const originalIndex = question.originalOrder[i];
+                    selectAnswer(index, originalIndex);
+                });
+                
+                optionsContainer.appendChild(optionItem);
+            });
+            
+            // Update tombol navigasi
+            document.getElementById('prev-btn').disabled = index === 0;
+            document.getElementById('next-btn').disabled = index === questions.length - 1;
+            
+            // Update status navigasi soal
+            updateNavigationStatus();
+            
+            // Scroll ke atas area soal
+            document.querySelector('.question-area').scrollTop = 0;
+            
+            // Simpan progress
+            saveTestProgress();
+        }
+
+        // Fungsi untuk memilih jawaban
+        function selectAnswer(questionIndex, originalIndex) {
+            answers[questionIndex] = originalIndex;
+            
+            // Update tampilan opsi yang dipilih
+            document.querySelectorAll('#options-container .option-item').forEach((item, i) => {
+                item.classList.remove('selected');
+            });
+            
+            // Tandai opsi yang dipilih berdasarkan indeks tampilan
+            const question = questions[questionIndex];
+            const originalOrder = questionRandomOrders[questionIndex];
+            const displayIndex = originalOrder.indexOf(originalIndex);
+            
+            if (displayIndex >= 0) {
+                document.querySelectorAll('#options-container .option-item')[displayIndex].classList.add('selected');
+            }
+            
+            // Update status navigasi untuk soal ini
+            const navItem = document.querySelector(`.nav-item[data-index="${questionIndex}"]`);
+            navItem.classList.add('answered');
+            
+            // Update tombol submit
+            updateSubmitButton();
+            
+            // Simpan progress
+            saveTestProgress();
+        }
+
+        // Fungsi untuk memperbarui status navigasi soal
+        function updateNavigationStatus() {
+            document.querySelectorAll('.nav-item').forEach((item, index) => {
+                if (answers[index] !== null) {
+                    item.classList.add('answered');
+                } else {
+                    item.classList.remove('answered');
+                }
+            });
+        }
+
+        // Fungsi untuk memperbarui status tombol submit
+        function updateSubmitButton() {
+            const allAnswered = answers.every(answer => answer !== null);
+            const submitBtn = document.getElementById('submit-btn');
+            
+            if (allAnswered) {
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('btn-disabled');
+            } else {
+                submitBtn.disabled = true;
+                submitBtn.classList.add('btn-disabled');
+            }
+        }
+
+        // Fungsi untuk memulai timer
+        function startTimer() {
+            updateTimerDisplay();
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                // Simpan progress setiap 10 detik
+                if (timeLeft % 10 === 0) {
+                    saveTestProgress();
+                }
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    submitTest();
+                }
+            }, 1000);
+        }
+
+        // Fungsi untuk memperbarui tampilan timer
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            const timerElement = document.getElementById('timer');
+            
+            timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Update warna timer berdasarkan sisa waktu
+            timerElement.classList.remove('warning', 'danger');
+            if (timeLeft <= 5 * 60) { // 5 menit tersisa
+                timerElement.classList.add('warning');
+            }
+            if (timeLeft <= 1 * 60) { // 1 menit tersisa
+                timerElement.classList.add('danger');
+            }
+        }
+
+        // Fungsi untuk mengirim tes
+        function submitTest() {
+            clearInterval(timerInterval);
+            
+            // Hapus progress yang disimpan
+            clearTestProgress();
+            
+            // Hitung skor per kategori
+            const categoryScores = {};
+            categories.forEach(category => {
+                categoryScores[category] = 0;
+            });
+            
+            let totalScore = 0;
+            
+            answers.forEach((answerIndex, questionIndex) => {
+                if (answerIndex !== null) {
+                    const question = questions[questionIndex];
+                    const points = question.options.find(opt => opt.points === question.options[answerIndex].points).points;
+                    totalScore += points;
+                    categoryScores[question.category] += points;
+                }
+            });
+            
+            // Tampilkan halaman hasil
+            document.getElementById('test-page').style.display = 'none';
+            document.getElementById('result-page').style.display = 'block';
+            
+            // Tampilkan skor akhir
+            document.getElementById('final-score').textContent = totalScore;
+            
+            // Tentukan status (MS/TMS)
+            const isPassing = totalScore >= 166;
+            const statusElement = document.getElementById('result-status');
+            statusElement.textContent = isPassing ? 'MS (Memuaskan)' : 'TMS (Tidak Memuaskan)';
+            statusElement.className = isPassing ? 'result-status status-ms' : 'result-status status-tms';
+            
+            // Tampilkan detail skor per kategori
+            const categoryScoresContainer = document.getElementById('category-scores');
+            categoryScoresContainer.innerHTML = '';
+            
+            categories.forEach(category => {
+                const scoreDiv = document.createElement('div');
+                scoreDiv.className = 'category-score';
+                scoreDiv.innerHTML = `
+                    <span class="category-name">${category}</span>
+                    <span class="category-points">${categoryScores[category]} poin (maks: 50)</span>
+                `;
+                categoryScoresContainer.appendChild(scoreDiv);
+            });
+        }
+
+        // Fungsi untuk kembali ke menu utama
+        function backToMenu() {
+            // Reset semua state
+            currentQuestionIndex = 0;
+            answers = new Array(50).fill(null);
+            timeLeft = 60 * 60;
+            testStarted = false;
+            questionRandomOrders = {};
+            testStartTime = null;
+            
+            // Hentikan timer jika masih berjalan
+            clearInterval(timerInterval);
+            
+            // Hapus progress yang disimpan
+            clearTestProgress();
+            
+            // Tampilkan menu utama, sembunyikan halaman lain
+            document.getElementById('main-menu').style.display = 'block';
+            document.getElementById('test-page').style.display = 'none';
+            document.getElementById('result-page').style.display = 'none';
+        }
+
+        // Event Listeners
+        document.getElementById('start-test').addEventListener('click', startTest);
+        document.getElementById('prev-btn').addEventListener('click', () => showQuestion(currentQuestionIndex - 1));
+        document.getElementById('next-btn').addEventListener('click', () => showQuestion(currentQuestionIndex + 1));
+        document.getElementById('submit-btn').addEventListener('click', submitTest);
+        document.getElementById('back-to-menu').addEventListener('click', backToMenu);
+
+        // Event listener untuk keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (!testStarted) return;
+            
+            switch(e.key) {
+                case 'ArrowLeft':
+                    showQuestion(currentQuestionIndex - 1);
+                    break;
+                case 'ArrowRight':
+                    showQuestion(currentQuestionIndex + 1);
+                    break;
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                    const optionIndex = parseInt(e.key) - 1;
+                    if (optionIndex >= 0 && optionIndex <= 4) {
+                        // Dapatkan soal saat ini dengan urutan acak
+                        const question = questions[currentQuestionIndex];
+                        const originalOrder = questionRandomOrders[currentQuestionIndex];
+                        if (originalOrder && optionIndex < originalOrder.length) {
+                            const originalIndex = originalOrder[optionIndex];
+                            selectAnswer(currentQuestionIndex, originalIndex);
+                        }
+                    }
+                    break;
+                case 'Enter':
+                    // Cek apakah semua soal sudah terjawab sebelum submit
+                    const allAnswered = answers.every(answer => answer !== null);
+                    if (allAnswered && document.getElementById('submit-btn').disabled === false) {
+                        submitTest();
+                    }
+                    break;
+            }
+        });
+
+        // Handler untuk resize window
+        window.addEventListener('resize', function() {
+            if (testStarted) {
+                // Perbarui tampilan soal saat ini saat resize
+                showQuestion(currentQuestionIndex);
+            }
+        });
+
+        // Cek apakah ada progress yang disimpan saat halaman dimuat
+        window.addEventListener('DOMContentLoaded', () => {
+            // Update informasi jumlah soal
+            document.querySelectorAll('.info-value')[1].textContent = 
+                `${Object.keys(questionDatabase).length * 10} soal (${Object.keys(questionDatabase).length} kategori x 10 soal)`;
+            
+            // Pastikan kontainer utama tidak overflow
+            document.body.style.overflowX = 'hidden';
+            document.documentElement.style.overflowX = 'hidden';
+            
+            // Cek apakah ada progress tes yang disimpan
+            const savedProgress = loadTestProgress();
+            if (savedProgress && savedProgress.testStarted) {
+                // Tanyakan apakah ingin melanjutkan tes sebelumnya
+                if (confirm("Anda memiliki tes yang belum selesai. Apakah ingin melanjutkan tes sebelumnya?")) {
+                    loadTestFromProgress(savedProgress);
+                } else {
+                    // Hapus progress jika tidak ingin melanjutkan
+                    clearTestProgress();
+                }
+            }
+        });
+
+        // Simpan progress sebelum halaman ditutup
+        window.addEventListener('beforeunload', function(e) {
+            if (testStarted && timeLeft > 0) {
+                // Simpan progress terakhir
+                saveTestProgress();
+                
+                // Tampilkan pesan konfirmasi
+                e.preventDefault();
+                e.returnValue = 'Progress tes Anda akan disimpan. Apakah Anda yakin ingin meninggalkan halaman?';
+                return e.returnValue;
+            }
+        });
+    </script>
+</body>
+</html>
+    <script  src="./script.js"></script>
+
+  </body>
+  
+</html>
